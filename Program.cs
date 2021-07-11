@@ -11,6 +11,7 @@ namespace Voice {
             using(reco = new SpeechRecognitionEngine(new System.Globalization.CultureInfo("fr-FR"))) {
                 reco.LoadGrammar(new DictationGrammar());
                 reco.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(reco_SpeechReco);
+                //reco.AudioLevelUpdated += new EventHandler<AudioLevelUpdatedEventArgs>(reco_AudioLevelUpdated);
                 if(Detect)
                     reco.SpeechDetected += new EventHandler<SpeechDetectedEventArgs>(reco_SpeechDetected);
                 if(Reject)
@@ -19,9 +20,7 @@ namespace Voice {
                 reco.SetInputToDefaultAudioDevice();
                 reco.RecognizeAsync(RecognizeMode.Multiple);
                 Console.WriteLine("Starting asynchronous recognition...");
-                while(true) {
-                    Console.ReadKey();
-                }
+                Console.ReadKey();
             }
         }
         static void reco_SpeechDetected(object sender, SpeechDetectedEventArgs e) {
@@ -50,6 +49,9 @@ namespace Voice {
                 Console.WriteLine("Bonjour");
                 break;
             }
+        }
+        static void reco_AudioLevelUpdated(object sender, AudioLevelUpdatedEventArgs e) {
+            Console.WriteLine("The audio level is now: {0}.", e.AudioLevel);
         }
         public void Dispose() {
             throw new NotImplementedException();
